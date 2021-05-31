@@ -1,5 +1,8 @@
 import { camel } from "case";
+import { getJsDoc } from "tsutils";
 import ts from "typescript";
+import { JSDocTagFilter, NameFilter } from "../config";
+import { getSimplifiedJsDocTags } from "../utils/getSimplifiedJsDocTags";
 import { generateIntegrationTests } from "./generateIntegrationTests";
 import { generateZodInferredType } from "./generateZodInferredType";
 import { generateZodSchemaVariableStatement } from "./generateZodSchema";
@@ -17,9 +20,14 @@ export interface GenerateProps {
   maxRun?: number;
 
   /**
-   * Filter function on type/interface name.
+   * Filter on type/interface name.
    */
-  nameFilter?: (name: string) => boolean;
+  nameFilter?: NameFilter;
+
+  /**
+   * Filter on JSDocTag.
+   */
+  jsDocTagFilter?: JSDocTagFilter;
 
   /**
    * Schema name generator.
@@ -42,6 +50,7 @@ export function generate({
   sourceText,
   maxRun = 10,
   nameFilter = () => true,
+  jsDocTagFilter = () => true,
   getSchemaName = (id) => camel(id) + "Schema",
   keepComments = false,
 }: GenerateProps) {
@@ -57,9 +66,11 @@ export function generate({
 
   const visitor = (node: ts.Node) => {
     if (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) {
-      if (nameFilter(node.name.text)) {
-        nodes.push(node);
-      }
+      const jsDoc = getJsDoc(node, sourceFile);
+      const tags = getSimplifiedJsDocTags(jsDoc);
+      if (!jsDocTagFilter(tags)) return;
+      if (!nameFilter(node.name.text)) return;
+      nodes.push(node);
     }
   };
   ts.forEachChild(sourceFile, visitor);
