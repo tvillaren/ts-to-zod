@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://www.github.com/fabien0102/ts-to-zod/compare/v1.7.0...v1.8.0) (2021-12-03)
+
+
+### Features
+
+* Add `skipParseJSDoc` option ([#62](https://www.github.com/fabien0102/ts-to-zod/issues/62)) ([e48c5fe](https://www.github.com/fabien0102/ts-to-zod/commit/e48c5fef0bc8cd09a5305b13ea1d62be20d0c5a7))
+
 ## [1.7.0](https://www.github.com/fabien0102/ts-to-zod/compare/v1.6.0...v1.7.0) (2021-11-28)
 
 
