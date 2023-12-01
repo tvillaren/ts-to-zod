@@ -66,6 +66,20 @@ export function validateGeneratedTypes({
     ...env.languageService.getSyntacticDiagnostics(getPath(integrationTests))
   );
 
+  const navTree = env.languageService.getNavigationTree(
+    getPath(integrationTests)
+  );
+  const inferredRef = navTree.childItems?.find(
+    (c) => c.text === "CitizenInferredType"
+  );
+
+  const quickInfo = env.languageService.getQuickInfoAtPosition(
+    getPath(integrationTests),
+    inferredRef?.nameSpan?.start || 0
+  );
+
+  console.log(ts.displayPartsToString(quickInfo?.displayParts));
+
   return errors.map((diagnostic) => {
     const message = ts.flattenDiagnosticMessageText(
       diagnostic.messageText,
