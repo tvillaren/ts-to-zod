@@ -210,7 +210,6 @@ describe("validateGeneratedTypes", () => {
     const sourceTypes = {
       sourceText: `
         export type Citizen = {
-            name: string
             heroAliases: string | number
         };
       `,
@@ -222,7 +221,6 @@ describe("validateGeneratedTypes", () => {
       import { z } from "zod";
   
       export const citizenSchema = z.object({
-          name: z.string(),
           heroAliases: z.union(z.string(), z.number())
       });
       `,
