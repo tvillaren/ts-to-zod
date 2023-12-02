@@ -221,7 +221,7 @@ describe("validateGeneratedTypes", () => {
       import { z } from "zod";
   
       export const citizenSchema = z.object({
-          heroAliases: z.union(z.string(), z.number())
+          heroAliases: z.union([z.string(), z.number()])
       });
       `,
       relativePath: "source.zod.ts",
